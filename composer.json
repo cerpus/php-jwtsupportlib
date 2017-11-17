@@ -1,0 +1,31 @@
+{
+  "name": "cerpus/jwtsupportlib",
+  "description": "Library to deal with JWTs",
+  "keywords": [
+    "laravel",
+    "lumen",
+    "Cerpus JWT support library"
+  ],
+  "require": {
+    "firebase/php-jwt": "^5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  },
+  "authors": [
+    {
+      "name": "Jan-Espen Oversand ",
+      "email": "jan.espen.oversand@cerpus.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Cerpus\\JWTSupport\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cerpus\\JWTSupportTest\\": "tests/"
+    }
+  }
+}
