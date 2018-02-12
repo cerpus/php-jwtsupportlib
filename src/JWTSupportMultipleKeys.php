@@ -3,22 +3,14 @@
 namespace Cerpus\JWTSupport;
 
 
-use Firebase\JWT\JWT;
-
-class JWTSupport extends JWTSupportAbstract {
-    private $publicKey;
+class JWTSupportMultipleKeys extends JWTSupportAbstract {
+    private $children = [];
     private $leeway;
 
-    public function __construct($publicKeyBase64) {
-        /*
-         * URL-safe base64
-         */
-        $publicKeyBase64 = str_replace('-', '+', $publicKeyBase64);
-        $publicKeyBase64 = str_replace('_', '/', $publicKeyBase64);
-
-        $this->publicKey = "-----BEGIN PUBLIC KEY-----\n".
-            $publicKeyBase64.
-            "\n-----END PUBLIC KEY-----\n";
+    public function __construct($publicKeys) {
+        foreach ($publicKeys as $publicKey) {
+            $this->children[] = new JWTSupport($publicKey);
+        }
     }
 
     /**
@@ -33,12 +25,13 @@ class JWTSupport extends JWTSupportAbstract {
      *
      */
     public function verify($jwt) {
-        JWT::$leeway = $this->leeway;
-        try {
-            return JWT::decode($jwt, $this->publicKey, ['RS256']);
-        } catch (SignatureInvalidException $e) {
-            return null;
+        foreach ($this->children as $child) {
+            $verified = $child->verify($jwt);
+            if ($verified) {
+                return $verified;
+            }
         }
+        return NULL;
     }
 
     /**
@@ -53,5 +46,8 @@ class JWTSupport extends JWTSupportAbstract {
      */
     public function setLeeway($leeway) {
         $this->leeway = $leeway;
+        foreach ($this->children as $child) {
+            $child->setLeeway($leeway);
+        }
     }
 }
