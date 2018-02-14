@@ -9,6 +9,7 @@
 namespace Cerpus\JWTSupport;
 
 
+use Firebase\JWT\SignatureInvalidException;
 use JOSE_JWK;
 
 class JWTVerifier {
@@ -72,10 +73,15 @@ class JWTVerifier {
     }
 
     public function verify($jwt) {
+        $exception = NULL;
         foreach ($this->verifiersByName as $name => $jwtSupport) {
-            $jwt = $jwtSupport->verify($jwt);
-            if ($jwt) {
-                return new ValidJWT($name, $jwt);
+            try {
+                $jwt = $jwtSupport->verify($jwt);
+                if ($jwt) {
+                    return new ValidJWT($name, $jwt);
+                }
+            } catch (SignatureInvalidException $e) {
+                $exception = $e;
             }
         }
         return null;
