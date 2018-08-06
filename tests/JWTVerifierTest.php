@@ -25,4 +25,19 @@ class JWTVerifierTest extends \PHPUnit_Framework_TestCase {
         self::assertEquals("1234567890", $jwt->sub);
         self::assertTrue($jwt->admin);
     }
+    /*
+     * @Test
+     */
+    public function testVerifyInvalidToken() {
+        $testToken = '1930af04-d0c5-44f3-bfc5-2cb6946bb351';
+        $pubKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3WojgGHFHYLugdUWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQsHUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5Do2kQ+X5xK9cipRgEKwIDAQAB';
+
+        $verifier = new JWTVerifier(
+            [
+                'test' => $pubKey
+            ]
+        );
+        $verified = $verifier->verify($testToken);
+        self::assertNull($verified);
+    }
 }
