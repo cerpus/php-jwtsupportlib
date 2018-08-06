@@ -4,6 +4,7 @@ namespace Cerpus\JWTSupport;
 
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
 
 class JWTSupport extends JWTSupportAbstract {
     private $publicKey;
@@ -37,6 +38,8 @@ class JWTSupport extends JWTSupportAbstract {
         try {
             return JWT::decode($jwt, $this->publicKey, ['RS256']);
         } catch (SignatureInvalidException $e) {
+            return null;
+        } catch (\UnexpectedValueException $e) {
             return null;
         }
     }
