@@ -76,9 +76,9 @@ class JWTVerifier {
         $exception = NULL;
         foreach ($this->verifiersByName as $name => $jwtSupport) {
             try {
-                $jwt = $jwtSupport->verify($jwt);
-                if ($jwt) {
-                    return new ValidJWT($name, $jwt);
+                $verifiedJwt = $jwtSupport->verify($jwt);
+                if ($verifiedJwt) {
+                    return new ValidJWT($name, $verifiedJwt);
                 }
             } catch (SignatureInvalidException $e) {
                 $exception = $e;
