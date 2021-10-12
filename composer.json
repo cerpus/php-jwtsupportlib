@@ -6,6 +6,7 @@
     "lumen",
     "Cerpus JWT support library"
   ],
+  "license": "GPL-3.0-only",
   "require": {
     "firebase/php-jwt": "^5.0",
     "gree/jose": "^2.2.1"
